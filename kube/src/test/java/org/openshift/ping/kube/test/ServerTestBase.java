@@ -70,9 +70,9 @@ public abstract class ServerTestBase extends TestBase {
         Address local_addr = pinger.getLocalAddress();
         PhysicalAddress physical_addr = (PhysicalAddress) pinger
                 .down(new Event(Event.GET_PHYSICAL_ADDRESS, local_addr));
-        PingHeader hdr = new TestPingHeader();
-        PingData data = new PingData(local_addr, null, false, UUID.get(local_addr),
-                physical_addr != null ? Arrays.asList(physical_addr) : null);
+        PingHeader hdr = new PingHeader(PingHeader.GET_MBRS_REQ);
+        hdr.clusterName(TestBase.CLUSTER_NAME);
+        PingData data = new PingData(local_addr, false, UUID.get(local_addr), physical_addr);
         Message msg = new Message(null).setFlag(Message.Flag.DONT_BUNDLE)
                 .putHeader(pinger.getId(), hdr).setBuffer(streamableToBuffer(data));
 
@@ -112,13 +112,6 @@ public abstract class ServerTestBase extends TestBase {
         @Override
         protected Client getClient() {
             return new TestClient();
-        }
-    }
-    
-    private static final class TestPingHeader extends PingHeader {
-        private TestPingHeader() {
-            cluster_name = TestBase.CLUSTER_NAME;
-            type = PingHeader.GET_MBRS_REQ;
         }
     }
 }
