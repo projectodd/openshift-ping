@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.projectodd.openshift.ping</groupId>
         <artifactId>openshift-ping-parent</artifactId>
-        <version>1.0.0.Beta5</version>
+        <version>1.0.0.Beta5-swarm-1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
