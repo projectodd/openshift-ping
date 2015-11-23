@@ -208,10 +208,11 @@ public class KubePing extends OpenshiftPing {
         for (Pod pod : pods) {
             List<Container> containers = pod.getContainers();
             for (Container container : containers) {
-                Context context = new Context(container, _pingPortName);
-                if (client.accept(context)) {
+                Context context = new Context(container, _pingPortName, _serverPort);
+                Port port = client.findPort(context);
+                if (port != null) {
                     String podIP = pod.getPodIP();
-                    int containerPort = container.getPort(_pingPortName).getContainerPort();
+                    int containerPort = port.getContainerPort();
                     retval.add(new InetSocketAddress(podIP, containerPort));
                 }
             }

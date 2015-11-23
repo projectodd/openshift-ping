@@ -22,10 +22,12 @@ package org.openshift.ping.kube;
 public final class Context {
     private final Container container;
     private final String pingPortName;
+    private final int defaultPingPort;
 
-    public Context(Container container, String pingPortName) {
+    public Context(Container container, String pingPortName, int defaultPingPort) {
         this.container = container;
         this.pingPortName = pingPortName;
+        this.defaultPingPort = defaultPingPort;
     }
 
     public Container getContainer() {
@@ -36,7 +38,12 @@ public final class Context {
         return pingPortName;
     }
 
+    public int getDefaultPingPort() {
+        return defaultPingPort;
+    }
+
     public String toString() {
-        return String.format("%s[container=%s, pingPortName=%s]", getClass().getSimpleName(), container, pingPortName);
+        return String.format("%s[container=%s, pingPortName=%s, defaultPingPort=%s]",
+                getClass().getSimpleName(), container, pingPortName, defaultPingPort);
     }
 }

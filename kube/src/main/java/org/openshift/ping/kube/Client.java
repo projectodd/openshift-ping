@@ -166,24 +166,24 @@ public class Client {
         return pods;
     }
 
-    public boolean accept(Context context) {
+    public Port findPort(Context context) {
         Container container = context.getContainer();
         List<Port> ports = container.getPorts();
         if (ports != null) {
             String pingPortName = context.getPingPortName();
             for (Port port : ports) {
                 if (pingPortName.equalsIgnoreCase(port.getName())) {
-                    return true;
+                    return port;
                 }
             }
-            // fallback on our default port since getting the po
+            // fallback on our default port in case the name isn't set
             for (Port port : ports) {
-                if (port.getContainerPort() == 8888) {
-                    return true;
+                if (port.getContainerPort() == context.getDefaultPingPort()) {
+                    return port;
                 }
             }
         }
-        return false;
+        return null;
     }
 
 }

@@ -52,8 +52,8 @@ public class ClientTest {
         Client client = new TestClient("/pods-noportname.json");
         Pod pod = client.getPods(null, null).get(0);
         Container container = pod.getContainers().get(0);
-        Context context = new Context(container, "ping");
-        Assert.assertTrue(client.accept(context));
+        Context context = new Context(container, "ping", 8888);
+        Assert.assertNotNull(client.findPort(context));
     }
 
 }
