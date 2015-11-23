@@ -143,11 +143,11 @@ public class Client {
                 Container container = new Container();
                 List<ModelNode> portNodes = portsNode.asList();
                 for (ModelNode portNode : portNodes) {
+                    String portName = "";
                     ModelNode portNameNode = portNode.get("name");
-                    if (!portNameNode.isDefined()) {
-                        continue;
+                    if (portNameNode.isDefined()) {
+                        portName = portNameNode.asString(); // ping
                     }
-                    String portName = portNameNode.asString(); // ping
                     ModelNode containerPortNode = portNode.get("containerPort");
                     if (!containerPortNode.isDefined()) {
                         continue;
@@ -173,6 +173,12 @@ public class Client {
             String pingPortName = context.getPingPortName();
             for (Port port : ports) {
                 if (pingPortName.equalsIgnoreCase(port.getName())) {
+                    return true;
+                }
+            }
+            // fallback on our default port since getting the po
+            for (Port port : ports) {
+                if (port.getContainerPort() == 8888) {
                     return true;
                 }
             }

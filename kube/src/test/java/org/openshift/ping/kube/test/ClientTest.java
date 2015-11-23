@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openshift.ping.kube.Client;
 import org.openshift.ping.kube.Container;
+import org.openshift.ping.kube.Context;
 import org.openshift.ping.kube.Pod;
 import org.openshift.ping.kube.Port;
 
@@ -44,6 +45,15 @@ public class ClientTest {
         Assert.assertEquals(2, container.getPorts().size());
         Port port = container.getPort("http");
         Assert.assertEquals(8080, port.getContainerPort());
+    }
+
+    @Test
+    public void testChoosesDefaultPingPortIfNoName() throws Exception {
+        Client client = new TestClient("/pods-noportname.json");
+        Pod pod = client.getPods(null, null).get(0);
+        Container container = pod.getContainers().get(0);
+        Context context = new Context(container, "ping");
+        Assert.assertTrue(client.accept(context));
     }
 
 }
