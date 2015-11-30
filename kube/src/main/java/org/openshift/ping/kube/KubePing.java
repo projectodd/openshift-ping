@@ -195,8 +195,8 @@ public class KubePing extends OpenshiftPing {
     protected synchronized List<InetSocketAddress> doReadAll(String clusterName) {
         Client client = getClient();
         if (log.isTraceEnabled()) {
-            log.trace(String.format("Looking up all pods from Kubernetes %s for cluster [%s], namespace [%s], labels [%s];"),
-                    client.info(), clusterName, _namespace, _labels);
+            log.trace(String.format("Looking up all pods from Kubernetes %s for cluster [%s], namespace [%s], labels [%s]",
+                    client.info(), clusterName, _namespace, _labels));
         }
         List<Pod> pods;
         try {
