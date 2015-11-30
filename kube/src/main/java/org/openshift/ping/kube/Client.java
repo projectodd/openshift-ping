@@ -167,21 +167,34 @@ public class Client {
     }
 
     public Port findPort(Context context) {
+        if (log.isLoggable(Level.FINEST)) {
+            log.log(Level.FINEST, String.format("Looking for ping port in context %s", context));
+        }
         Container container = context.getContainer();
         List<Port> ports = container.getPorts();
         if (ports != null) {
             String pingPortName = context.getPingPortName();
             for (Port port : ports) {
                 if (pingPortName.equalsIgnoreCase(port.getName())) {
+                    if (log.isLoggable(Level.FINEST)) {
+                        log.log(Level.FINEST, String.format("Found ping port by name of %s", port.getName()));
+                    }
                     return port;
                 }
             }
             // fallback on our default port in case the name isn't set
             for (Port port : ports) {
                 if (port.getContainerPort() == context.getDefaultPingPort()) {
+                    if (log.isLoggable(Level.FINEST)) {
+                        log.log(Level.FINEST, String.format("Found ping port by falling back to default ping port of %s",
+                                context.getDefaultPingPort()));
+                    }
                     return port;
                 }
             }
+        }
+        if (log.isLoggable(Level.FINEST)) {
+            log.log(Level.FINEST, String.format("Did not find matching ping port for context %s", context));
         }
         return null;
     }

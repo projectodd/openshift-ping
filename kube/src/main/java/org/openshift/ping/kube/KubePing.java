@@ -194,6 +194,10 @@ public class KubePing extends OpenshiftPing {
     @Override
     protected synchronized List<InetSocketAddress> doReadAll(String clusterName) {
         Client client = getClient();
+        if (log.isTraceEnabled()) {
+            log.trace(String.format("Looking up all pods from Kubernetes %s for cluster [%s], namespace [%s], labels [%s];"),
+                    client.info(), clusterName, _namespace, _labels);
+        }
         List<Pod> pods;
         try {
             pods = client.getPods(_namespace, _labels);
@@ -206,6 +210,9 @@ public class KubePing extends OpenshiftPing {
         }
         List<InetSocketAddress> retval = new ArrayList<>();
         for (Pod pod : pods) {
+            if (log.isTraceEnabled()) {
+                log.trace(String.format("Found pod %s", pod));
+            }
             List<Container> containers = pod.getContainers();
             for (Container container : containers) {
                 Context context = new Context(container, _pingPortName, _serverPort);
@@ -213,6 +220,9 @@ public class KubePing extends OpenshiftPing {
                 if (port != null) {
                     String podIP = pod.getPodIP();
                     int containerPort = port.getContainerPort();
+                    if (log.isTraceEnabled()) {
+                        log.trace(String.format("Found ping server at http://%s:%s", podIP, containerPort));
+                    }
                     retval.add(new InetSocketAddress(podIP, containerPort));
                 }
             }
